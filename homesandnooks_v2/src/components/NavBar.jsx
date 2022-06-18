@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import  styled  from "styled-components";
+import userService from "../services/userService";
 
 
 
@@ -69,8 +70,18 @@ const NavBar = () => {
             <NavLinks>
                 <Link to="/"><li>Home</li></Link>
                 <li>AboutUs</li>
-                <li>SignUp</li>
-                <li>Login</li>
+                {
+                    userService.isLoggedIn() ? 
+                    [
+                        <li key={1} onClick={() => userService.userAccount()}>MyAccount</li>,
+                        <li key={2} onClick={() => userService.doLogout({redirectUri: "http://localhost:3000"})}>Logout</li>
+                    ]:
+                    [
+                        <li key={1} onClick={() => userService.doRegister()}>SignUp</li>,
+                        <li key={2} onClick={() => userService.doLogin()}>Login</li>
+                    ]
+                }
+                
             </NavLinks>
 
         </Wrapper>

@@ -11,6 +11,7 @@ const PropertySchema = new mongoose.Schema({
     bathroom: {type: Number, required: true},
     toilet: {type: Number, required: true},
     propertyOwner: {type: String, required: true},
+    uploader: {type: String, required: true},
     description: {type: String, required: true},
     validFrom: {type: String, required: true},
     validTo: {type: String, required: true},

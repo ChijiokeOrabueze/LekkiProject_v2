@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Input from "./Input";
 import imageUpload from "../helpers/imageUpload";
+import userService from "../services/userService";
 
 
 
@@ -198,18 +199,24 @@ const DisplayProperty = () => {
     <Container>
         <Heading>
             <div className="header">
-                <div><p>Uploaded by:</p><h4> {propertyData.propertyOwner}</h4></div>
+                <div><p>Uploaded by:</p><h4> {propertyData.uploader}</h4></div>
                 <div><p>Property Owner:</p><h4> {propertyData.propertyOwner}</h4></div>
             </div>
-            <UpdateButton type="button" onClick={()=> navigate('/update_property', {state: {id:propertyData._id}})}>Update Property</UpdateButton>
-            <Form onSubmit = {handleSubmit}>
-                <Input 
-                    name= 'image'
-                    type = 'file'
-                    handleChange = {handleFileChange}
-                    />
-                <input type='submit' value='upload'/>
-            </Form>
+            {
+                userService.isLoggedIn() && userService.getUser() === propertyData.uploader &&
+                [
+                    <UpdateButton key={1} type="button" onClick={()=> navigate('/update_property', {state: {id:propertyData._id}})}>Update Property</UpdateButton>,
+                    <Form key={2} onSubmit = {handleSubmit}>
+                        <Input 
+                            name= 'image'
+                            type = 'file'
+                            handleChange = {handleFileChange}
+                            />
+                        <input type='submit' value='upload'/>
+                    </Form>
+                ]
+            }
+            
         </Heading>
         <ImageContainer>
             <div>

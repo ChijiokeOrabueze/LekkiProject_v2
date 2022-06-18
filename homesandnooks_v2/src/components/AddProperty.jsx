@@ -7,6 +7,8 @@ import TextArea from './TextArea';
 import updateDetails from '../helpers/updateProperty';
 import fetchData from '../helpers/fetchData';
 import imageUpload from '../helpers/imageUpload';
+import RenderOnAuthenticated from './RenderOnAuthenticated';
+import userService from '../services/userService';
 
 const Container = styled.div`
     width: 100vw;
@@ -207,7 +209,8 @@ class AddProperty extends Component {
             url = process.env.REACT_APP_GET_PROPERTY_BASE_URL + `${this.props.propId}`;
             method = "put"
         }
-
+        
+        others.uploader = userService.getUser();
         const response = await fetchData(method, url, others)
         .then(this.handleResponse);
 
@@ -244,69 +247,71 @@ class AddProperty extends Component {
         const details = update ? updateDetails :  propertyDetails;
         
         return (
-            <Container style={{height: update ? "calc(100vh - 80px)": ""}}>
-                
-                <form onSubmit={this.handleSubmit} encType = "multipart/form-data">
-                    <h1 style={{margin: "10px 0"}}>{update? `Update Property ${propId}` : "Add New Property Details"}</h1>
-                    <Wrapper>
-                        {
-                            details.map((p)=>{
-                                if (p.type === "select") {
-                                    return <Select 
+            <RenderOnAuthenticated url = {update ? "http://localhost:3000/properties" : "http://localhost:3000/add_property"}>
+                <Container style={{height: update ? "calc(100vh - 80px)": ""}}>
+                    
+                    <form onSubmit={this.handleSubmit} encType = "multipart/form-data">
+                        <h1 style={{margin: "10px 0"}}>{update? `Update Property ${propId}` : "Add New Property Details"}</h1>
+                        <Wrapper>
+                            {
+                                details.map((p)=>{
+                                    if (p.type === "select") {
+                                        return <Select 
+                                                    key = {p.id}
+                                                    // width = "100px"
+                                                    title = {p.title} 
+                                                    name={p.name}
+                                                    value = {this.state[p.name]}
+                                                    placeholder= {p.pHolder}
+                                                    handleChange = {this.handleChange}
+                                                    options = {["Residential", "Duplex", "Commercial", "Flat"]}/>
+
+                                        
+                                    } else if (p.type === "textarea"){
+                                        return <TextArea
+                                                    key = {p.id}
+                                                    title = {p.title} 
+                                                    name={p.name}
+                                                    rows={10}
+                                                    cols={50}
+                                                    value={this.state[p.name]}
+                                                    handleChange={this.handleChange}
+                                                    placeHolder={p.pHolder}/>
+
+                                    }else if (p.type === "file"){
+                                        return <Input 
+                                                key = {p.id}
+                                                title = {p.title}
+                                                name= {p.name}
+                                                type = {p.type}
+                                                // value = {this.state[p.name]}
+                                                handleChange = {this.handleFileChange}
+                                                /> 
+                                        
+                                    }else {
+                                        return <Input 
                                                 key = {p.id}
                                                 // width = "100px"
-                                                title = {p.title} 
-                                                name={p.name}
+                                                title = {p.title}
+                                                name= {p.name}
+                                                type = {p.type}
+                                                max = {4}
                                                 value = {this.state[p.name]}
                                                 placeholder= {p.pHolder}
                                                 handleChange = {this.handleChange}
-                                                options = {["Residential", "Duplex", "Commercial", "Flat"]}/>
+                                                />
 
-                                    
-                                } else if (p.type === "textarea"){
-                                    return <TextArea
-                                                key = {p.id}
-                                                title = {p.title} 
-                                                name={p.name}
-                                                rows={10}
-                                                cols={50}
-                                                value={this.state[p.name]}
-                                                handleChange={this.handleChange}
-                                                placeHolder={p.pHolder}/>
-
-                                }else if (p.type === "file"){
-                                    return <Input 
-                                            key = {p.id}
-                                            title = {p.title}
-                                            name= {p.name}
-                                            type = {p.type}
-                                            // value = {this.state[p.name]}
-                                            handleChange = {this.handleFileChange}
-                                            /> 
-                                    
-                                }else {
-                                    return <Input 
-                                            key = {p.id}
-                                            // width = "100px"
-                                            title = {p.title}
-                                            name= {p.name}
-                                            type = {p.type}
-                                            max = {4}
-                                            value = {this.state[p.name]}
-                                            placeholder= {p.pHolder}
-                                            handleChange = {this.handleChange}
-                                            />
-
-                                }
-                            })
-                        }
-                    </Wrapper>
-                    <SubmitButton type="submit">- {update ? "Update": "Add"} Property -</SubmitButton>
-                </form>
-                <MsgDisplay style = {{display: this.state.error === "" ? "none": "flex"}}>
-                    <p style={{color: "red"}}>{this.state.error}</p>
-                </MsgDisplay>
-            </Container>
+                                    }
+                                })
+                            }
+                        </Wrapper>
+                        <SubmitButton type="submit">- {update ? "Update": "Add"} Property -</SubmitButton>
+                    </form>
+                    <MsgDisplay style = {{display: this.state.error === "" ? "none": "flex"}}>
+                        <p style={{color: "red"}}>{this.state.error}</p>
+                    </MsgDisplay>
+                </Container>
+            </RenderOnAuthenticated>
         )
     }
 }
