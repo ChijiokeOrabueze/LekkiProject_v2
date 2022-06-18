@@ -198,19 +198,21 @@ class AddProperty extends Component {
         let url = process.env.REACT_APP_ADD_PROPERTY_URL;
         let method = "post";
         let {image, error, ...others} = this.state;
+        others.uploader = userService.getUser();
         if (this.props.update){
             delete others.address;
             delete others.validFrom;
             delete others.price;
             delete others.type;
             delete others.propertyOwner;
+            delete others.uploader;
 
        
             url = process.env.REACT_APP_GET_PROPERTY_BASE_URL + `${this.props.propId}`;
             method = "put"
         }
         
-        others.uploader = userService.getUser();
+        
         const response = await fetchData(method, url, others)
         .then(this.handleResponse);
 
@@ -222,7 +224,23 @@ class AddProperty extends Component {
                     .then(this.handleResponse);
     
                 if (newResponse && newResponse.status === "success"){
-                    this.setState({error: response.data});
+                    // this.setState({error: response.data});
+                    this.setState({
+                        address: "",
+                        type: "",
+                        bedroom: "",
+                        sittingRoom: "",
+                        kitchen: "",
+                        toilet: "",
+                        bathroom: "",
+                        propertyOwner: "",
+                        image: "",
+                        validFrom: "",
+                        validTo: "",
+                        price: "",
+                        description: "",
+                        error:response.data
+                    })
                 }
             }else if (this.props.update) {
                 this.setState({error: response.data})

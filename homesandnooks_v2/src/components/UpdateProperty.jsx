@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AddProperty from './AddProperty';
 
 
@@ -7,7 +7,16 @@ import AddProperty from './AddProperty';
 
 const UpdateProperty = () => {
     const location = useLocation();
-    const id = location.state.id;
+    let id;
+    if (location.state) {
+      id = location.state.id;
+    }else {
+      return (
+        <div><h2>Bad Request: You are requesting a page wrongly. Go to <Link to="/properties">All properties page</Link> and choose the property to update.</h2></div>
+      )
+    }
+
+    
   return (
     <AddProperty 
         update = {true}

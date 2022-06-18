@@ -1,9 +1,10 @@
 import  styled  from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import Input from "./Input";
 import imageUpload from "../helpers/imageUpload";
 import userService from "../services/userService";
+
 
 
 
@@ -144,7 +145,16 @@ const DisplayProperty = () => {
     const [image, setImage] = useState("");
     const [error, setError] = useState("");
 
-    const propertyData = location.state.data;
+    let propertyData;
+    if (location.state) {
+        propertyData = location.state.data;
+    } else {
+        return (
+            <div><h2>Bad Request: You are requesting a page wrongly. Go to <Link to="/properties">All properties page</Link> and choose the property you wish to inspect.</h2></div>
+        )
+    }
+
+    
 
 
     const handleResponse = (data) =>{
@@ -195,7 +205,6 @@ const DisplayProperty = () => {
 
 
   return (
-      
     <Container>
         <Heading>
             <div className="header">
@@ -268,7 +277,7 @@ const DisplayProperty = () => {
         <MsgDisplay style = {{display: error === "" ? "none": "flex"}}>
             <p style={{color: "red"}}>{error}</p>
         </MsgDisplay>
-      
+    
     </Container>
   )
 }
