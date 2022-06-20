@@ -9,6 +9,7 @@ const PropertyController = (serviceContainer, helpers) =>{
            
             const property = await serviceContainer.saveItem(req.body);
             const response = helpers.constructResponse(property, "Property added successfully", "create");
+            // console.log(req.kauth.grant);
             res.status(201).json(response);
         }catch(err){
             res.send({"error":err});
@@ -32,6 +33,7 @@ const PropertyController = (serviceContainer, helpers) =>{
             const response = helpers.constructResponse(property, "fetched all properties");
             res.status(200).json(response);
             
+            
         }catch (err){
             res.send({"error": err});
         }
@@ -39,8 +41,10 @@ const PropertyController = (serviceContainer, helpers) =>{
 
     const updateProperty = async (req, res) => {
         try{
-            console.log("here ", req.params.id, req.body)
-            const updatedProperty = await serviceContainer.updateItem(req.params.id, req.body);
+            
+            const user = {id: req.kauth.grant.access_token.content.preferred_username,
+                        roles: req.kauth.grant.access_token.content.roles};
+            const updatedProperty = await serviceContainer.updateItem(req.params.id, req.body, user);
             const response = helpers.constructResponse(updatedProperty, `property with id ${req.params.id} updated successfully`);
             res.status(200).json(response);
         }catch(err){

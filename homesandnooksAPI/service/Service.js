@@ -55,7 +55,11 @@ const Service = (targetRepo) =>{
         }
     }
 
-    const updateItem = async (itemId, updates) => {
+    const updateItem = async (itemId, updates, user) => {
+        const property = queryItem({id: itemId}, {});
+        if ((property.length > 0 && property[0].uploader !== user.id) || !user.roles.includes("admin")) {
+            throw 'notPermitted';
+        }
         const arr = ["bedroom", "sittingRoom", "kitchen", "bathroom", "toilet", "description", "validTo"];
         Object.keys(updates).forEach(u => {
             !arr.includes(u) && delete updates[u];

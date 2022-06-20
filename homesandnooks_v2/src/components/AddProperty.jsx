@@ -265,7 +265,7 @@ class AddProperty extends Component {
         const details = update ? updateDetails :  propertyDetails;
         
         return (
-            <RenderOnAuthenticated url = {update ? "http://localhost:3000/properties" : "http://localhost:3000/add_property"}>
+            <RenderOnAuthenticated url = {update ? process.env.REACT_APP_PROPERTIES_PAGE_URL : process.env.REACT_APP_ADD_PROPERTY_PAGE_URL}>
                 <Container style={{height: update ? "calc(100vh - 80px)": ""}}>
                     
                     <form onSubmit={this.handleSubmit} encType = "multipart/form-data">

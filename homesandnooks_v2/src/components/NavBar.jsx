@@ -74,7 +74,7 @@ const NavBar = () => {
                     userService.isLoggedIn() ? 
                     [
                         <li key={1} onClick={() => userService.userAccount()}>MyAccount</li>,
-                        <li key={2} onClick={() => userService.doLogout({redirectUri: "http://localhost:3000"})}>Logout</li>
+                        <li key={2} onClick={() => userService.doLogout({redirectUri: process.env.REACT_APP_HOME_PAGE_URL})}>Logout</li>
                     ]:
                     [
                         <li key={1} onClick={() => userService.doRegister()}>SignUp</li>,
