@@ -12,7 +12,7 @@ const UpdateProperty = () => {
       id = location.state.id;
     }else {
       return (
-        <div><h2>Bad Request: You are requesting a page wrongly. Go to <Link to="/properties">All properties page</Link> and choose the property to update.</h2></div>
+        <div><h2>Access Denied: You are requesting a page wrongly. Go to <Link to="/properties">All properties page</Link> and choose the property to update.</h2></div>
       )
     }
 

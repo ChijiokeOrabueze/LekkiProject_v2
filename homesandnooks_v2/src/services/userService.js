@@ -46,6 +46,8 @@ const updateToken = _kc.updateToken;
 
 const getUser = () => _kc.tokenParsed?.preferred_username;
 
+const getUserName = () => _kc.tokenParsed?.given_name;
+
 const hasRole = (roles) => roles.some((role) => 
     _kc.hasRealmRole(role));
 
@@ -58,6 +60,7 @@ const userService = {
     getToken,
     updateToken,
     getUser,
+    getUserName,
     hasRole,
     doRegister,
     userAccount

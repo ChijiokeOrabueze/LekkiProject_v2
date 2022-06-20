@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import userService from '../services/userService';
 
 const Container = styled.div`
     width: 100vw;
@@ -68,7 +69,11 @@ const Home = () => {
     <Container>
       <Bg />
       <Body>
-          <h1>Find your dream home <span>or</span> Put up house for sale</h1>
+        {
+            userService.hasRole(['admin', 'app-admin', 'Admin']) 
+                ? <h1>{`welcome admin ${userService.getUserName()} |`}<span style={{fontSize: "30px"}}>|</span> What do you want to do today?</h1>
+                : <h1>Find your dream home <span>or</span> Put up house for sale</h1>
+        } 
           <Cta>
               <Link to="/properties"><button>- See available properties -</button></Link>
               <Link to="/add_property"><button>- Add property -</button></Link>

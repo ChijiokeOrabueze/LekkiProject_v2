@@ -150,7 +150,7 @@ const DisplayProperty = () => {
         propertyData = location.state.data;
     } else {
         return (
-            <div><h2>Bad Request: You are requesting a page wrongly. Go to <Link to="/properties">All properties page</Link> and choose the property you wish to inspect.</h2></div>
+            <div><h2>Access Denied: You are requesting a page wrongly. Go to <Link to="/properties">All properties page</Link> and choose the property you wish to inspect.</h2></div>
         )
     }
 
@@ -208,11 +208,12 @@ const DisplayProperty = () => {
     <Container>
         <Heading>
             <div className="header">
+                <span onClick={() => navigate('/properties')} style={{border: "1px solid black", backgroundColor: "#f4f4f4", cursor: "pointer"}}>&#60;&#60;back</span>
                 <div><p>Uploaded by:</p><h4> {propertyData.uploader}</h4></div>
                 <div><p>Property Owner:</p><h4> {propertyData.propertyOwner}</h4></div>
             </div>
             {
-                userService.isLoggedIn() && userService.getUser() === propertyData.uploader &&
+                userService.isLoggedIn() && (userService.getUser() === propertyData.uploader || userService.hasRole(['admin', 'app-admin', 'Admin'])) &&
                 [
                     <UpdateButton key={1} type="button" onClick={()=> navigate('/update_property', {state: {id:propertyData._id}})}>Update Property</UpdateButton>,
                     <Form key={2} onSubmit = {handleSubmit}>

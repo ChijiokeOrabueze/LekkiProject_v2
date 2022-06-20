@@ -9,7 +9,7 @@ const propertyService = Service("property");
 const propertyController = PropertyController(propertyService, {constructResponse});
 
 
-router.get("/property/:id?", keycloak.protect(), propertyController.getProperty);
+router.get("/property/:id?", propertyController.getProperty);
 router.post("/property", keycloak.protect(), propertyController.addProperty);
 router.put("/property/:id", keycloak.protect(), propertyController.updateProperty);
 router.post("/upload", keycloak.protect(), propertyController.addPropertyImage)
